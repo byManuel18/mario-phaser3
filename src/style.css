@@ -1,0 +1,29 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: pixel;
+  src: url('../fonts/SuperMario.ttf');
+}
+
+html,
+body {
+  zoom: 100%;
+  max-zoom: 100%;
+  min-zoom: 100%;
+  background: rgb(132, 132, 255);
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  color: #f0f0f0;
+  font-family: pixel;
+}
+#game {
+  height: 100%;
+  width: 100%;
+  font-family: pixel;
+  display: flex;
+}
