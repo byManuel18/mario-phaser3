@@ -7,6 +7,7 @@ import { BlockBuilder } from "./types/blockBuilder";
 import { GAME_SCALE } from "../config";
 import { Brik } from "../scenary/brik";
 import { floorBuilder } from "./utils/floorBuilder";
+import { MAP_LEVEL_ONE } from "./data/maps";
 
 export class LevelOne extends Phaser.Scene {
   player?: Mario;
@@ -32,62 +33,7 @@ export class LevelOne extends Phaser.Scene {
 
     this.floor = this.physics.add.staticGroup();
 
-    const map: (BlockBuilder | null)[][] = [
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        Brik,
-        Brik,
-        null,
-        null,
-        null,
-        null,
-        Brik,
-        Brik,
-        null,
-      ],
-      [
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        null,
-        null,
-        null,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-        Brik,
-      ],
-    ];
-
-    floorBuilder(this.floor, map, { x: 0, y: SCREENHEIGHT });
+    floorBuilder(this.floor, MAP_LEVEL_ONE, { x: 0, y: SCREENHEIGHT });
 
     this.player = new Mario(this, 100, SCREENHEIGHT - 32 * GAME_SCALE);
 
