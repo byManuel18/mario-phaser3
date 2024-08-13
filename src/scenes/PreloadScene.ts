@@ -1,6 +1,5 @@
 import { ANIMATIONS } from "../entities/config/animations";
 import { SPRITES } from "../entities/config/sprites";
-import { Mario } from "../entities/mario";
 import { SCREENHEIGHT, SCREENWIDTH } from "../main";
 import { AUDIO } from "./audio/audio";
 import { SCENES } from "./config/scenes.config";
@@ -8,7 +7,6 @@ import { SCENES } from "./config/scenes.config";
 
 export class PreloadScene extends Phaser.Scene {
 
-    player?: Mario;
 
     constructor(){
         super(SCENES.PRELOAD);

@@ -3,9 +3,7 @@ import { SCENES } from "./config/scenes.config";
 import { SPRITES } from "../entities/config/sprites";
 import { SCREENHEIGHT } from "../main";
 import { AUDIO } from "./audio/audio";
-import { BlockBuilder } from "./types/blockBuilder";
 import { GAME_SCALE } from "../config";
-import { Brik } from "../scenary/brik";
 import { floorBuilder } from "./utils/floorBuilder";
 import { MAP_LEVEL_ONE } from "./data/maps";
 
