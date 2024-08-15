@@ -1,4 +1,5 @@
 import { GAME_SCALE } from "../config";
+import { SCREENHEIGHT, SCREENWIDTH } from "../main";
 import { generarUUID } from "../scenes/utils/generarUUID";
 import { Slot } from "./slot";
 
@@ -37,10 +38,17 @@ export class Inventory {
 
   private generateInventory(scene: Phaser.Scene) {
     let index = 0;
+    const slotWidth = 16 * GAME_SCALE + 10;
+    const inventoryWidth = this.rows * slotWidth; 
+    const inventoryHeight = this.colums * slotWidth; 
+
+    const offsetX = (SCREENWIDTH - inventoryWidth) / 2;
+    const offsetY = (SCREENHEIGHT - inventoryHeight) / 2;
+
     for (let c = 0; c < this.colums; c++) {
       for (let r = 0; r < this.rows; r++) {
-        const x = r * (16 * GAME_SCALE + 10);
-        const y = c * (16 * GAME_SCALE + 10);
+        const x = offsetX + r * slotWidth;
+        const y = offsetY + c * slotWidth;
         this.inventory.push(
           new Slot(scene, x, y, index, null, 0, this.maxItem)
         );
