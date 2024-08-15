@@ -24,4 +24,4 @@ export const getConfig = (
 };
 
 
-export const GAME_SCALE = 1;
+export const GAME_SCALE = 3;

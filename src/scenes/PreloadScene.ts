@@ -15,6 +15,7 @@ export class PreloadScene extends Phaser.Scene {
     preload():void{
         this.loadSprites();
         this.loadAudio();
+        this.loadImages();
     }
 
     create():void{
@@ -98,6 +99,12 @@ export class PreloadScene extends Phaser.Scene {
     private loadAudio(){
         this.load.audio(AUDIO.overworldTheme.key,AUDIO.overworldTheme.path);
         this.load.audio(AUDIO.dead.key,AUDIO.dead.path);
+    }
+
+    private loadImages(){
+        this.load.image("mushroom", "../../assets/collectibles/super-mushroom.png");
+        this.load.image("mushroom-live", "../../assets/collectibles/live-mushroom.png");
+        this.load.image("slot", "../../assets/mine/slot.png");
     }
 
  

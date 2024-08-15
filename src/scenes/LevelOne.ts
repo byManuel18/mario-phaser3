@@ -6,6 +6,7 @@ import { AUDIO } from "./audio/audio";
 import { GAME_SCALE } from "../config";
 import { floorBuilder } from "./utils/floorBuilder";
 import { MAP_LEVEL_ONE } from "./data/maps";
+import { Inventory } from "../entities/intentory";
 
 export class LevelOne extends Phaser.Scene {
   player?: Mario;
@@ -38,6 +39,9 @@ export class LevelOne extends Phaser.Scene {
     this.physics.add.collider(this.player, this.floor);
 
     this.mainAudio.play();
+    
+    const newInventory = new Inventory(this,2,3,64);
+
   }
 
   update(time: number, delta: number): void {
@@ -53,4 +57,6 @@ export class LevelOne extends Phaser.Scene {
 
     this.load.spritesheet(key, path, { frameWidth, frameHeight });
   }
+
+  
 }
