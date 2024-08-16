@@ -2,5 +2,6 @@
 
 export enum SCENES {
     PRELOAD = 'PreloadScene',
-    LEVEL_ONE = 'LevelOne'
+    LEVEL_ONE = 'LevelOne',
+    UISCENE = 'UIScene'
 }

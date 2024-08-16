@@ -1,7 +1,7 @@
 import { Mario } from "../entities/mario";
 import { SCENES } from "./config/scenes.config";
 import { SPRITES } from "../entities/config/sprites";
-import { SCREENHEIGHT } from "../main";
+import { SCREENHEIGHT, SCREENWIDTH } from "../main";
 import { AUDIO } from "./audio/audio";
 import { GAME_SCALE } from "../config";
 import { floorBuilder } from "./utils/floorBuilder";
@@ -27,6 +27,11 @@ export class LevelOne extends GlobalScene {
   }
 
   create(): void {
+
+    const WIDTH_LEVEL = (SCREENWIDTH * 2) * GAME_SCALE;
+
+    this.physics.world.setBounds(0, 0, WIDTH_LEVEL , SCREENHEIGHT);
+
     this.mainAudio = this.sound.add(AUDIO.overworldTheme.key, {
       loop: true,
       volume: 0.2,
@@ -40,14 +45,13 @@ export class LevelOne extends GlobalScene {
 
     this.physics.add.collider(this.player, this.floor);
 
-    this.mainAudio.play();
+    this.mainAudio.play(); 
     
-    const newInventory = new Inventory(this,2,3,64);
+    this.cameras.main.setBounds(0, 0, WIDTH_LEVEL, SCREENHEIGHT);
+    this.cameras.main.startFollow(this.player);
+    
+    this.scene.launch(SCENES.UISCENE,{parentScene: SCENES.LEVEL_ONE});
 
-    setTimeout(()=>{
-      newInventory.addItemToInventory(this.textures.get('mushroom-live'));
-      newInventory.addItemToInventory(this.textures.get('mushroom-live'));
-    },5000)
 
     const pause = new HandlePause(this);
 

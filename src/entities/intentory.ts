@@ -1,5 +1,6 @@
 import { GAME_SCALE } from "../config";
 import { SCREENHEIGHT, SCREENWIDTH } from "../main";
+import { GlobalSceneUI } from "../scenes/class/globalSceneUi.class";
 import { CustomEvents } from "../scenes/config/customEvents";
 import { generarUUID } from "../scenes/utils/generarUUID";
 import { Slot } from "./slot";
@@ -20,7 +21,7 @@ export class Inventory {
   private inventroyKey?: Phaser.Input.Keyboard.Key;
 
   constructor(
-    scene: Phaser.Scene,
+    scene: GlobalSceneUI,
     colums: number,
     rows: number,
     maxItem: number,
@@ -62,7 +63,7 @@ export class Inventory {
     }
   }
 
-  private setListenner(scene: Phaser.Scene) {
+  private setListenner(scene: GlobalSceneUI) {
     scene.input.on(
       "dragstart",
       (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
@@ -178,7 +179,7 @@ export class Inventory {
       }
     });
 
-    scene.events.on(CustomEvents.START,(paused: boolean)=>{
+    scene.scene.get(scene.parentScene).events.on(CustomEvents.START,(paused: boolean)=>{
       this.blocked = paused;
     });
   }

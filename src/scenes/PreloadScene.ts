@@ -1,6 +1,5 @@
 import { ANIMATIONS } from "../entities/config/animations";
 import { SPRITES } from "../entities/config/sprites";
-import { SCREENHEIGHT, SCREENWIDTH } from "../main";
 import { AUDIO } from "./audio/audio";
 import { SCENES } from "./config/scenes.config";
 
@@ -20,9 +19,6 @@ export class PreloadScene extends Phaser.Scene {
 
     create():void{
         this.createAnimations();
-
-        this.physics.world.setBounds(0, 0, SCREENWIDTH, SCREENHEIGHT);
-        
       
         this.scene.start(SCENES.LEVEL_ONE);
       
