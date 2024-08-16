@@ -3,7 +3,7 @@ import { CustomScene } from "../interfaces/customScene.interface";
 
 export abstract class GlobalScene extends Phaser.Scene implements CustomScene {
     
-    player!: Mario;
+    abstract player: Mario;
     
     constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
         super(config);

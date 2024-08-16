@@ -10,6 +10,7 @@ import { Inventory } from "../entities/intentory";
 import { GlobalScene } from "./class/globalScene.class";
 
 export class LevelOne extends GlobalScene {
+  player!: Mario;
   floor?: Phaser.Physics.Arcade.StaticGroup;
   mainAudio?:
     | Phaser.Sound.NoAudioSound
