@@ -30,6 +30,8 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
     this.setScale(GAME_SCALE, GAME_SCALE);
 
     this.keys = scene.input.keyboard?.createCursorKeys();
+
+    this.setListener();
   }
 
   move() {
@@ -89,5 +91,11 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
 
   set setDataPlayer(data: Player) {
     this.playerData = { ...data };
+  }
+
+  private setListener(){
+    this.scene.events.on('update',()=>{
+      this.move();
+    })
   }
 }

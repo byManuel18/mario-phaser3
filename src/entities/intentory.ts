@@ -58,11 +58,6 @@ export class Inventory {
         index++;
       }
     }
-
-    // this.inventory[0].addItem(this.scene.textures.get("mushroom"));
-    // this.inventory[4].addItem(this.scene.textures.get("mushroom"));
-    // this.inventory[2].addItem(this.scene.textures.get("mushroom-live"));
-    // this.inventory[3].addItem(this.scene.textures.get("mushroom-live"));
   }
 
   private setListenner(scene: Phaser.Scene) {
@@ -168,7 +163,7 @@ export class Inventory {
       if (Phaser.Input.Keyboard.JustDown(this.inventroyKey!)) {
         const slot: Slot = this.inventory[this.selectedSlot];
         if(slot && slot.getCountItems > 0){
-          slot.useItems(1);
+          const itemUsed = slot.useItems(1);
         }
       }
       
