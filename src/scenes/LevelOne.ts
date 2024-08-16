@@ -8,6 +8,7 @@ import { floorBuilder } from "./utils/floorBuilder";
 import { MAP_LEVEL_ONE } from "./data/maps";
 import { Inventory } from "../entities/intentory";
 import { GlobalScene } from "./class/globalScene.class";
+import { HandlePause } from "./class/handlePause.class";
 
 export class LevelOne extends GlobalScene {
   player!: Mario;
@@ -48,10 +49,12 @@ export class LevelOne extends GlobalScene {
       newInventory.addItemToInventory(this.textures.get('mushroom-live'));
     },5000)
 
+    const pause = new HandlePause(this);
+
   }
 
   update(time: number, delta: number): void {
-   
+   this.player.move();
   }
 
   private loadSprites() {

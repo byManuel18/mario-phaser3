@@ -2,6 +2,7 @@ import { GAME_SCALE } from "../config";
 import { Player } from "../interfaces/player.interface";
 import { SCREENHEIGHT, SCREENWIDTH } from "../main";
 import { AUDIO } from "../scenes/audio/audio";
+import { CustomEvents } from "../scenes/config/customEvents";
 import { ANIMATIONS } from "./config/animations";
 import { SPRITES } from "./config/sprites";
 
@@ -94,8 +95,8 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
   }
 
   private setListener(){
-    this.scene.events.on('update',()=>{
-      this.move();
+    this.scene.events.on(CustomEvents.START,(pause: boolean)=>{
+      this.playerData.bloked = pause;
     })
   }
 }

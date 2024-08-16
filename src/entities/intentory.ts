@@ -1,5 +1,6 @@
 import { GAME_SCALE } from "../config";
 import { SCREENHEIGHT, SCREENWIDTH } from "../main";
+import { CustomEvents } from "../scenes/config/customEvents";
 import { generarUUID } from "../scenes/utils/generarUUID";
 import { Slot } from "./slot";
 
@@ -8,6 +9,7 @@ export class Inventory {
   private rows: number = 0;
   private maxItem: number = 0;
   private selectedSlot: number = -1;
+  private blocked: boolean = false;
 
   private uuid: string;
 
@@ -64,6 +66,7 @@ export class Inventory {
     scene.input.on(
       "dragstart",
       (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
+        if (this.blocked) return;
         gameObject.setAlpha(0.5);
       }
     );
@@ -76,6 +79,7 @@ export class Inventory {
         dragX: number,
         dragY: number
       ) => {
+        if (this.blocked) return;
         gameObject.x = dragX;
         gameObject.y = dragY;
       }
@@ -88,6 +92,7 @@ export class Inventory {
         gameObject: Phaser.GameObjects.Image,
         dropZone: Phaser.GameObjects.Zone
       ) => {
+        if (this.blocked) return;
         gameObject.setAlpha(1);
 
         const curretSlot: Slot = gameObject.getData("slot");
@@ -114,11 +119,12 @@ export class Inventory {
 
     scene.input.on(
       "dragend",
-      function (
+      (
         pointer: Phaser.Input.Pointer,
         gameObject: Phaser.GameObjects.Image,
         dropped: any
-      ) {
+      ) => {
+        if (this.blocked) return;
         gameObject.setAlpha(1);
         if (!dropped) {
           gameObject.x = gameObject.input!.dragStartX;
@@ -129,44 +135,51 @@ export class Inventory {
 
     scene.input.on(
       "wheel",
-     (
+      (
         pointer: Phaser.Input.Pointer,
         gameObjects: any,
         deltaX: number,
         deltaY: number,
         deltaZ: number
-      )=>{
+      ) => {
+        if(this.blocked) return;
         let isScroll = false;
         if (deltaY > 0) {
           this.selectedSlot--;
-          if(0 > this.selectedSlot ){
+          if (0 > this.selectedSlot) {
             this.selectedSlot = this.inventory.length - 1;
-          } 
+          }
           isScroll = true;
         } else if (deltaY < 0) {
           this.selectedSlot++;
-          if(this.inventory.length -1 < this.selectedSlot ){
+          if (this.inventory.length - 1 < this.selectedSlot) {
             this.selectedSlot = 0;
-          } 
+          }
           isScroll = true;
         }
 
-        if(isScroll){
+        if (isScroll) {
           this.changeSelectedSlot();
         }
       }
     );
 
-    this.inventroyKey = scene.input?.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+    this.inventroyKey = scene.input?.keyboard?.addKey(
+      Phaser.Input.Keyboard.KeyCodes.Q
+    );
 
-    scene.events.on('update',()=>{
+    scene.events.on("update", () => {
+      if(this.blocked) return;
       if (Phaser.Input.Keyboard.JustDown(this.inventroyKey!)) {
         const slot: Slot = this.inventory[this.selectedSlot];
-        if(slot && slot.getCountItems > 0){
+        if (slot && slot.getCountItems > 0) {
           const itemUsed = slot.useItems(1);
         }
       }
-      
+    });
+
+    scene.events.on(CustomEvents.START,(paused: boolean)=>{
+      this.blocked = paused;
     });
   }
 
@@ -196,13 +209,13 @@ export class Inventory {
     return added;
   }
 
-  private changeSelectedSlot(){
-    this.inventory.forEach(slot=>{
-      if(slot.getIndex === this.selectedSlot){
+  private changeSelectedSlot() {
+    this.inventory.forEach((slot) => {
+      if (slot.getIndex === this.selectedSlot) {
         slot.toggleSelected(true);
-      }else{
+      } else {
         slot.toggleSelected();
       }
-    })
+    });
   }
 }
