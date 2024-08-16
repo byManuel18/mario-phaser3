@@ -168,7 +168,7 @@ export class Inventory {
       Phaser.Input.Keyboard.KeyCodes.Q
     );
 
-    scene.events.on("update", () => {
+    scene.input?.keyboard?.on("keydown-Q", () => {
       if(this.blocked) return;
       if (Phaser.Input.Keyboard.JustDown(this.inventroyKey!)) {
         const slot: Slot = this.inventory[this.selectedSlot];
