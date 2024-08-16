@@ -7,12 +7,15 @@ export class Inventory {
   private colums: number = 0;
   private rows: number = 0;
   private maxItem: number = 0;
+  private selectedSlot: number = -1;
 
   private uuid: string;
 
   private inventory: Slot[] = [];
 
   private scene: Phaser.Scene;
+
+  private inventroyKey?: Phaser.Input.Keyboard.Key;
 
   constructor(
     scene: Phaser.Scene,
@@ -39,8 +42,8 @@ export class Inventory {
   private generateInventory(scene: Phaser.Scene) {
     let index = 0;
     const slotWidth = 16 * GAME_SCALE + 10;
-    const inventoryWidth = this.rows * slotWidth; 
-    const inventoryHeight = this.colums * slotWidth; 
+    const inventoryWidth = this.rows * slotWidth;
+    const inventoryHeight = this.colums * slotWidth;
 
     const offsetX = (SCREENWIDTH - inventoryWidth) / 2;
     const offsetY = (SCREENHEIGHT - inventoryHeight) / 2;
@@ -56,10 +59,10 @@ export class Inventory {
       }
     }
 
-    this.inventory[0].addItem(this.scene.textures.get("mushroom"));
-    this.inventory[4].addItem(this.scene.textures.get("mushroom"));
-    this.inventory[2].addItem(this.scene.textures.get("mushroom-live"));
-    this.inventory[3].addItem(this.scene.textures.get("mushroom-live"));
+    // this.inventory[0].addItem(this.scene.textures.get("mushroom"));
+    // this.inventory[4].addItem(this.scene.textures.get("mushroom"));
+    // this.inventory[2].addItem(this.scene.textures.get("mushroom-live"));
+    // this.inventory[3].addItem(this.scene.textures.get("mushroom-live"));
   }
 
   private setListenner(scene: Phaser.Scene) {
@@ -121,13 +124,55 @@ export class Inventory {
         gameObject: Phaser.GameObjects.Image,
         dropped: any
       ) {
-        gameObject.setAlpha(1); // Restaurar la opacidad del objeto
+        gameObject.setAlpha(1);
         if (!dropped) {
           gameObject.x = gameObject.input!.dragStartX;
           gameObject.y = gameObject.input!.dragStartY;
         }
       }
     );
+
+    scene.input.on(
+      "wheel",
+     (
+        pointer: Phaser.Input.Pointer,
+        gameObjects: any,
+        deltaX: number,
+        deltaY: number,
+        deltaZ: number
+      )=>{
+        let isScroll = false;
+        if (deltaY > 0) {
+          this.selectedSlot--;
+          if(0 > this.selectedSlot ){
+            this.selectedSlot = this.inventory.length - 1;
+          } 
+          isScroll = true;
+        } else if (deltaY < 0) {
+          this.selectedSlot++;
+          if(this.inventory.length -1 < this.selectedSlot ){
+            this.selectedSlot = 0;
+          } 
+          isScroll = true;
+        }
+
+        if(isScroll){
+          this.changeSelectedSlot();
+        }
+      }
+    );
+
+    this.inventroyKey = scene.input?.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+
+    scene.events.on('update',()=>{
+      if (Phaser.Input.Keyboard.JustDown(this.inventroyKey!)) {
+        const slot: Slot = this.inventory[this.selectedSlot];
+        if(slot && slot.getCountItems > 0){
+          slot.useItems(1);
+        }
+      }
+      
+    });
   }
 
   private flipSlot(slotA: Slot, slotB: Slot) {
@@ -136,5 +181,33 @@ export class Inventory {
 
     slotA.slotConfig = configSlotB;
     slotB.slotConfig = configSlotA;
+  }
+
+  public addItemToInventory(
+    item: Phaser.Textures.Texture,
+    count: number = 1
+  ): boolean {
+    let added: boolean = false;
+
+    const slotSelected: Slot | undefined =
+      this.inventory.find(
+        (slot) => slot.itemKey === item.key && slot.canAddItem(item)
+      ) || this.inventory.find((slot) => slot.canAddItem(item));
+
+    if (slotSelected) {
+      slotSelected.addItem(item, count);
+    }
+
+    return added;
+  }
+
+  private changeSelectedSlot(){
+    this.inventory.forEach(slot=>{
+      if(slot.getIndex === this.selectedSlot){
+        slot.toggleSelected(true);
+      }else{
+        slot.toggleSelected();
+      }
+    })
   }
 }

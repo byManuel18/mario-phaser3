@@ -8,6 +8,7 @@ export class Slot extends Phaser.GameObjects.GameObject {
   private backGroundImg: Phaser.GameObjects.Image;
   private zone: Phaser.GameObjects.Zone | null = null;
   private text: Phaser.GameObjects.Text | null = null;
+  private selectBox: Phaser.GameObjects.Graphics;
 
   private index: number;
 
@@ -19,13 +20,12 @@ export class Slot extends Phaser.GameObjects.GameObject {
     item: Phaser.GameObjects.Image | null = null,
     currentItems: number = 0,
     maxItems: number = 1,
-    width?: number,
-    height?: number
+    selected: boolean = false
   ) {
     super(scene, "Slot");
 
     this.backGroundImg = scene.add
-      .image(x, y, "slot", 1)
+      .image(x, y, "slot")
       .setOrigin(0)
       .setScale(GAME_SCALE);
     this.item = item;
@@ -62,7 +62,7 @@ export class Slot extends Phaser.GameObjects.GameObject {
       .setDepth(1)
       .setScale(GAME_SCALE * 0.5);
 
-    if (scene.physics.getConfig().debug) {
+    if (!scene.physics.getConfig().debug) {
       scene.add
         .graphics()
         .lineStyle(2, 0xffff00)
@@ -73,6 +73,16 @@ export class Slot extends Phaser.GameObjects.GameObject {
           this.zone.input?.hitArea.height
         );
     }
+
+    this.selectBox = scene.add
+    .graphics()
+    .lineStyle(2, 0xffff)
+    .strokeRect(
+      this.zone.x + this.zone.input?.hitArea.x,
+      this.zone.y + this.zone.input?.hitArea.y,
+      this.zone.input?.hitArea.width,
+      this.zone.input?.hitArea.height
+    ).setVisible(selected);
   }
 
   public canAddItem(item: Phaser.Textures.Texture): boolean {
@@ -94,13 +104,14 @@ export class Slot extends Phaser.GameObjects.GameObject {
 
   public removeItem(
     item: Phaser.Textures.Texture,
-    removeAll: boolean = false
+    removeAll: boolean = false,
+    count: number = 1
   ): void {
     if (this.item && item.key === this.item.texture.key) {
       if (removeAll) {
         this.currentItems = 0;
       } else {
-        this.currentItems--;
+        this.currentItems -= count;
       }
       this.updateText();
       if (!this.currentItems) {
@@ -150,9 +161,6 @@ export class Slot extends Phaser.GameObjects.GameObject {
   }
 
   private buildImg(item: Phaser.Textures.Texture) {
-    console.log(item.get(0).cutHeight);
-    console.log(item.get(0).cutWidth);
-
     const cutH = this.zone!.input?.hitArea.height / 2;
     const cutW =  this.zone!.input?.hitArea.width / 2;;
     
@@ -164,5 +172,23 @@ export class Slot extends Phaser.GameObjects.GameObject {
       .setDataEnabled()
       .setData("slot", this);
     this.scene.input.setDraggable(this.item);
+  }
+
+  get itemKey(){
+    return this.item?.texture.key || null;
+  }
+
+  toggleSelected(visible: boolean = false){
+    this.selectBox.setVisible(visible);
+  }
+
+  useItems(count: number = 1): string | null{
+    if(this.item && count <= this.currentItems){
+      const keyItem = this.item.texture.key;
+      this.removeItem(this.item.texture, false,count);
+      return keyItem;
+    }else{
+      return null;
+    }
   }
 }

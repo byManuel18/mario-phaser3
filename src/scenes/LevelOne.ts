@@ -42,6 +42,11 @@ export class LevelOne extends Phaser.Scene {
     
     const newInventory = new Inventory(this,2,3,64);
 
+    setTimeout(()=>{
+      newInventory.addItemToInventory(this.textures.get('mushroom-live'));
+      newInventory.addItemToInventory(this.textures.get('mushroom-live'));
+    },5000)
+
   }
 
   update(time: number, delta: number): void {
