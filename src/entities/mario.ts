@@ -2,6 +2,7 @@ import { GAME_SCALE } from "../config";
 import { Player } from "../interfaces/player.interface";
 import { SCREENHEIGHT, SCREENWIDTH } from "../main";
 import { AUDIO } from "../scenes/audio/audio";
+import { GlobalScene } from "../scenes/class/globalScene.class";
 import { CustomEvents } from "../scenes/config/customEvents";
 import { ANIMATIONS } from "./config/animations";
 import { SPRITES } from "./config/sprites";
@@ -18,7 +19,7 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
 
   private keys?: Phaser.Types.Input.Keyboard.CursorKeys;
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
+  constructor(scene: GlobalScene, x: number, y: number) {
     super(scene, x, y, SPRITES.mario.key);
 
     scene.physics.world.setBoundsCollision(true, true, true, false);
@@ -31,6 +32,9 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
     this.setScale(GAME_SCALE, GAME_SCALE);
 
     this.keys = scene.input.keyboard?.createCursorKeys();
+
+    scene.cameras.main.setBounds(0, 0, scene.widthScene, scene.heightScene);
+    scene.cameras.main.startFollow(this);
 
     this.setListener();
   }

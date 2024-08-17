@@ -6,5 +6,8 @@ export interface CustomScene{
     | Phaser.Sound.NoAudioSound
     | Phaser.Sound.HTML5AudioSound
     | Phaser.Sound.WebAudioSound;
+    widthScene: number;
+    heightScene: number;
+
 
 }

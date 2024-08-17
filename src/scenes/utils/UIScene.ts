@@ -25,7 +25,7 @@ export class UIScene extends GlobalSceneUI {
         setTimeout(()=>{
           newInventory.addItemToInventory(this.textures.get('mushroom-live'));
           newInventory.addItemToInventory(this.textures.get('mushroom-live'));
-        },5000)
+        },5000);
         
     }
 }

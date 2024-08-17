@@ -15,6 +15,8 @@ export class LevelOne extends GlobalScene {
     | Phaser.Sound.NoAudioSound
     | Phaser.Sound.HTML5AudioSound
     | Phaser.Sound.WebAudioSound;
+  widthScene: number = (SCREENWIDTH * 2) * GAME_SCALE;
+  heightScene: number = SCREENHEIGHT;
 
   constructor() {
     super(SCENES.LEVEL_ONE);
@@ -26,9 +28,7 @@ export class LevelOne extends GlobalScene {
 
   create(): void {
 
-    const WIDTH_LEVEL = (SCREENWIDTH * 2) * GAME_SCALE;
-
-    this.physics.world.setBounds(0, 0, WIDTH_LEVEL , SCREENHEIGHT);
+    this.physics.world.setBounds(0, 0, this.widthScene , this.heightScene);
 
     this.mainAudio = this.sound.add(AUDIO.overworldTheme.key, {
       loop: true,
@@ -44,9 +44,6 @@ export class LevelOne extends GlobalScene {
     this.physics.add.collider(this.player, this.floor);
 
     this.mainAudio.play(); 
-    
-    this.cameras.main.setBounds(0, 0, WIDTH_LEVEL, SCREENHEIGHT);
-    this.cameras.main.startFollow(this.player);
     
     this.scene.launch(SCENES.UISCENE,{parentScene: SCENES.LEVEL_ONE});
 

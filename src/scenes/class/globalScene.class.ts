@@ -5,6 +5,8 @@ export abstract class GlobalScene extends Phaser.Scene implements CustomScene {
     
     abstract player: Mario;
     abstract mainAudio?: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | undefined;
+    abstract widthScene: number;
+    abstract heightScene: number;
     
     constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
         super(config);
