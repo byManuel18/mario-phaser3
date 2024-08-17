@@ -6,6 +6,7 @@ import { GlobalScene } from "../scenes/class/globalScene.class";
 import { CustomEvents } from "../scenes/config/customEvents";
 import { ANIMATIONS } from "./config/animations";
 import { SPRITES } from "./config/sprites";
+import { Enemy } from "./enemy";
 
 export class Mario extends Phaser.Physics.Arcade.Sprite {
   private playerData: Player = {
@@ -19,17 +20,21 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
 
   private keys?: Phaser.Types.Input.Keyboard.CursorKeys;
 
+  private floorCollider?: Phaser.Physics.Arcade.Collider;
+  private enemysCollider?: Phaser.Physics.Arcade.Collider;
+
   constructor(scene: GlobalScene, x: number, y: number) {
     super(scene, x, y, SPRITES.mario.key);
 
     scene.physics.world.setBoundsCollision(true, true, true, false);
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    
+
     this.setOrigin(0, 1);
     this.setGravityY(this.playerData.gravity);
     this.setCollideWorldBounds(true);
     this.setScale(GAME_SCALE, GAME_SCALE);
+    this.setDepth(1);
 
     this.keys = scene.input.keyboard?.createCursorKeys();
 
@@ -40,7 +45,7 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
   }
 
   move() {
-    if (this.playerData.bloked || !this.playerData.life) return;
+    if (this.playerData.bloked || !this.playerData.life || this.scene.scene.isPaused()) return;
 
     switch (true) {
       case this.keys?.right.isDown:
@@ -62,33 +67,67 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.keys?.space.isDown && this.body?.touching.down) {
-      this.scene.sound.play(AUDIO.marioJump.key, {volume: 0.05});
+      this.scene.sound.play(AUDIO.marioJump.key, { volume: 0.05 });
       this.setVelocityY(-this.playerData.jumpForce);
       this.anims.play(ANIMATIONS.mario.jump.key, true);
     }
 
-    if (this.y > SCREENHEIGHT) {
+    if (this.y > SCREENHEIGHT + 32) {
       this.killMario();
     }
   }
 
-  hitMario() {}
+  hitMario() {
+    //TODO de momento así
+    this.killMario();
+  }
 
   private killMario() {
     this.playerData.bloked = true;
+    if (this.floorCollider) {
+      this.floorCollider.active = false;
+    }
+    if (this.enemysCollider) {
+      this.enemysCollider.active = false;
+    }
     this.anims.play(ANIMATIONS.mario.dead.key);
     this.setVelocityY(-this.playerData.jumpForce);
     this.setVelocityX(0);
     this.scene.sound.stopAll();
-    this.scene.sound.play(AUDIO.dead.key,{loop: false, volume: 0.5});
+    this.scene.sound.play(AUDIO.dead.key, { loop: false, volume: 0.5 });
     this.playerData.life--;
-    setTimeout(() => {
-      this.playerData.bloked = false;
-      this.scene.sound.stopAll();
-      this.scene.scene.restart();
 
-      //TODO AL QUITAR VIDAS TERMINAR GAME NO REINICIAR
-    }, 3000);
+    this.scene.time.delayedCall(
+      3000,
+      () => {
+        this.scene.sound.stopAll();
+        this.scene.scene.restart();
+        //TODO AL QUITAR VIDAS TERMINAR GAME NO REINICIAR
+      },
+      [],
+      this
+    );
+  }
+
+  setFloorCollider(floor: Phaser.Physics.Arcade.StaticGroup) {
+    this.floorCollider = this.scene.physics.add.collider(this, floor);
+  }
+
+  setEnemysCollider(enemys: Phaser.Physics.Arcade.Group) {
+    this.enemysCollider = this.scene.physics.add.collider(
+      this,
+      enemys,
+      (mario, enemy) => {
+        const { left, right, down, up } = (mario as Mario).body!.touching;
+        if (left || right || up) {
+          this.hitMario();
+        } else if (down) {
+          if (enemy instanceof Enemy) {
+            enemy.killEnemy();
+          }
+        }
+      }
+    );
   }
 
   get getDataPlayer() {
@@ -99,9 +138,9 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
     this.playerData = { ...data };
   }
 
-  private setListener(){
-    this.scene.events.on(CustomEvents.START,(pause: boolean)=>{
-      this.playerData.bloked = pause;
-    })
+  private setListener() {
+    // this.scene.events.on(CustomEvents.START, (pause: boolean) => {
+    //   this.playerData.bloked = pause;
+    // });
   }
 }

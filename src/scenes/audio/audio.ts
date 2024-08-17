@@ -17,4 +17,9 @@ export const AUDIO = {
         key: 'mario-jump',
         path: '../../assets/sound/effects/jump.mp3'
     },
+    goombaStomp:{
+        key: 'goomba-stomp',
+        path: '../../assets/sound/effects/goomba-stomp.wav'
+    },
+
 }

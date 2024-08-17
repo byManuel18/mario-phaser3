@@ -7,16 +7,19 @@ import { GAME_SCALE } from "../config";
 import { floorBuilder } from "./utils/floorBuilder";
 import { MAP_LEVEL_ONE } from "./data/maps";
 import { GlobalScene } from "./class/globalScene.class";
+import { Gommba } from "../entities/goomba";
+import { Enemy } from "../entities/enemy";
 
 export class LevelOne extends GlobalScene {
   player!: Mario;
-  floor?: Phaser.Physics.Arcade.StaticGroup;
   mainAudio?:
     | Phaser.Sound.NoAudioSound
     | Phaser.Sound.HTML5AudioSound
     | Phaser.Sound.WebAudioSound;
   widthScene: number = (SCREENWIDTH * 2) * GAME_SCALE;
   heightScene: number = SCREENHEIGHT;
+
+  enemys?: Phaser.Physics.Arcade.Group;
 
   constructor() {
     super(SCENES.LEVEL_ONE);
@@ -35,22 +38,35 @@ export class LevelOne extends GlobalScene {
       volume: 0.2,
     });
 
-    this.floor = this.physics.add.staticGroup();
+    const floor = this.physics.add.staticGroup();
+    this.enemys = this.physics.add.group();
 
-    floorBuilder(this.floor, MAP_LEVEL_ONE, { x: 0, y: SCREENHEIGHT });
+    floorBuilder(floor, MAP_LEVEL_ONE, { x: 0, y: SCREENHEIGHT });
 
     this.player = new Mario(this, 100, SCREENHEIGHT - 32 * GAME_SCALE);
 
-    this.physics.add.collider(this.player, this.floor);
+    this.player.setFloorCollider(floor);
 
-    this.mainAudio.play(); 
+    this.enemys.add(new Gommba(this, 10, SCREENHEIGHT - 16 * GAME_SCALE));
     
+    this.player.setEnemysCollider(this.enemys);
+    
+    this.physics.add.collider(this.enemys, floor);
+    
+    
+    this.mainAudio.play(); 
+
     this.scene.launch(SCENES.UISCENE,{parentScene: SCENES.LEVEL_ONE});
 
   }
 
   update(time: number, delta: number): void {
    this.player.move();
+   Phaser.Actions.Call(this.enemys?.getChildren() || [],(enemy)=>{
+    if(enemy instanceof Enemy){
+      enemy.moveEnemy();
+    }
+   },this);
   }
 
   private loadSprites() {

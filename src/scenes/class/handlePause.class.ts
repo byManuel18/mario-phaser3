@@ -14,19 +14,22 @@ export class HandlePause {
 
         scene.input?.keyboard?.on('keydown-ENTER', () => {
 
-            this.pauseSong.play({volume: 0.1});
 
             const parentScene = scene.scene.get(scene.parentScene) as GlobalScene;
 
             if(parentScene.physics.world.isPaused){
                 parentScene.physics.world.resume();
                 parentScene.anims.resumeAll();
-                parentScene.mainAudio?.resume();
+                parentScene.sound.resumeAll();
+                parentScene.scene.resume();
             }else{
-                parentScene.mainAudio?.pause();
+                parentScene.sound.pauseAll();
                 parentScene.physics.world.pause();
                 parentScene.anims.pauseAll();
+                parentScene.scene.pause();
             }
+
+            this.pauseSong.play({volume: 0.1});
 
             parentScene.events.emit(CustomEvents.START, parentScene.physics.world.isPaused);
         });

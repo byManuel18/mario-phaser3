@@ -10,5 +10,11 @@ export const SPRITES = {
         key: 'floorBriks',
         path: '../../assets/scenery/overworld/floorbricks.png',
         frames: { frameWidth: 16, frameHeight: 16 }
+    },
+
+    goomba: {
+        key: 'goomba',
+        path: '../../assets/entities/overworld/goomba.png',
+        frames: { frameWidth: 16, frameHeight: 16 }
     }
 }

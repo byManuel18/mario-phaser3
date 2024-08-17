@@ -28,12 +28,20 @@ export class PreloadScene extends Phaser.Scene {
     private loadSprites(){
 
         const {key, path, frames: {frameHeight, frameWidth}} = SPRITES.mario;
-
+        
         this.load.spritesheet(
             key,
             path,
             { frameWidth, frameHeight },
-        )
+        );
+
+        const goobasprite = SPRITES.goomba;
+        
+        this.load.spritesheet(
+            goobasprite.key,
+            goobasprite.path,
+            { frameWidth: goobasprite.frames.frameWidth, frameHeight: goobasprite.frames.frameHeight },
+        );
     }
 
     private createAnimations(){
@@ -89,6 +97,32 @@ export class PreloadScene extends Phaser.Scene {
             repeat: -1
         });
 
+        this.anims.create({
+            key: ANIMATIONS.goomba.walk.key,
+            frames: this.anims.generateFrameNumbers(
+                ANIMATIONS.goomba.walk.sprite.key,
+                { 
+                    start: ANIMATIONS.goomba.walk.sprite.start, 
+                    end:  ANIMATIONS.goomba.walk.sprite.end 
+                }
+            ),
+            frameRate: ANIMATIONS.goomba.walk.frameRate,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: ANIMATIONS.goomba.dead.key,
+            frames: this.anims.generateFrameNumbers(
+                ANIMATIONS.goomba.dead.sprite.key,
+                { 
+                    start: ANIMATIONS.goomba.dead.sprite.start, 
+                    end:  ANIMATIONS.goomba.dead.sprite.end 
+                }
+            ),
+            frameRate: ANIMATIONS.goomba.dead.frameRate,
+            repeat: -1
+        });
+
         
     }
 
@@ -97,6 +131,7 @@ export class PreloadScene extends Phaser.Scene {
         this.load.audio(AUDIO.dead.key,AUDIO.dead.path);
         this.load.audio(AUDIO.pause.key,AUDIO.pause.path);
         this.load.audio(AUDIO.marioJump.key,AUDIO.marioJump.path);
+        this.load.audio(AUDIO.goombaStomp.key,AUDIO.goombaStomp.path);
     }
 
     private loadImages(){

@@ -44,5 +44,28 @@ export const ANIMATIONS = {
             }
         }
       
+    },
+
+    goomba: {
+        walk: {
+            key: 'goomba-walk',
+            frameRate: 6,
+            sprite: {
+                key: SPRITES.goomba.key,
+                start: 0,
+                end: 1,
+                frameRate: 12
+            }
+        },
+        dead: {
+            key: 'goomba-dead',
+            frameRate: 6,
+            sprite: {
+                key: SPRITES.goomba.key,
+                start: 2,
+                end: 2,
+                frameRate: 12
+            }
+        },
     }
 }
