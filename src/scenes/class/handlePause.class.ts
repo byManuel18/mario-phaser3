@@ -1,6 +1,7 @@
 import { AUDIO } from "../audio/audio";
 import { CustomEvents } from "../config/customEvents";
 import { GlobalScene } from "./globalScene.class";
+import { GlobalSceneUI } from "./globalSceneUi.class";
 
 
 export class HandlePause {
@@ -8,24 +9,26 @@ export class HandlePause {
     pauseSong: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
 
 
-    constructor(scene: GlobalScene){
+    constructor(scene: GlobalSceneUI){
         this.pauseSong = scene.sound.add(AUDIO.pause.key);
 
         scene.input?.keyboard?.on('keydown-ENTER', () => {
 
             this.pauseSong.play({volume: 0.1});
 
-            if(scene.physics.world.isPaused){
-                scene.physics.world.resume();
-                scene.anims.resumeAll();
-                scene.mainAudio?.resume()
+            const parentScene = scene.scene.get(scene.parentScene) as GlobalScene;
+
+            if(parentScene.physics.world.isPaused){
+                parentScene.physics.world.resume();
+                parentScene.anims.resumeAll();
+                parentScene.mainAudio?.resume();
             }else{
-                scene.mainAudio?.pause()
-                scene.physics.world.pause();
-                scene.anims.pauseAll();
+                parentScene.mainAudio?.pause();
+                parentScene.physics.world.pause();
+                parentScene.anims.pauseAll();
             }
 
-            scene.events.emit(CustomEvents.START,scene.physics.world.isPaused);
+            parentScene.events.emit(CustomEvents.START, parentScene.physics.world.isPaused);
         });
     }
 }

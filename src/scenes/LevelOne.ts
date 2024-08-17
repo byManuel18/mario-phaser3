@@ -6,9 +6,7 @@ import { AUDIO } from "./audio/audio";
 import { GAME_SCALE } from "../config";
 import { floorBuilder } from "./utils/floorBuilder";
 import { MAP_LEVEL_ONE } from "./data/maps";
-import { Inventory } from "../entities/intentory";
 import { GlobalScene } from "./class/globalScene.class";
-import { HandlePause } from "./class/handlePause.class";
 
 export class LevelOne extends GlobalScene {
   player!: Mario;
@@ -51,9 +49,6 @@ export class LevelOne extends GlobalScene {
     this.cameras.main.startFollow(this.player);
     
     this.scene.launch(SCENES.UISCENE,{parentScene: SCENES.LEVEL_ONE});
-
-
-    const pause = new HandlePause(this);
 
   }
 

@@ -1,5 +1,6 @@
 import { Inventory } from "../../entities/intentory";
 import { GlobalSceneUI } from "../class/globalSceneUi.class";
+import { HandlePause } from "../class/handlePause.class";
 import { SCENES } from "../config/scenes.config";
 import { UiScene } from "../interfaces/ui.interface";
 
@@ -18,6 +19,7 @@ export class UIScene extends GlobalSceneUI {
         this.parentScene = setings.parentScene;
         
 
+        const pauseHandle = new HandlePause(this);
         const newInventory = new Inventory(this,2,3,64);
 
         setTimeout(()=>{
