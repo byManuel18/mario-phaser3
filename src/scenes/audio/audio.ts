@@ -13,4 +13,8 @@ export const AUDIO = {
         key: 'game-pause',
         path: '../../assets/sound/effects/pause.wav'
     },
+    marioJump:{
+        key: 'mario-jump',
+        path: '../../assets/sound/effects/jump.mp3'
+    },
 }

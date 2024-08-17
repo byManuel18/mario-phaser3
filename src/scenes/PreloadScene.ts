@@ -96,6 +96,7 @@ export class PreloadScene extends Phaser.Scene {
         this.load.audio(AUDIO.overworldTheme.key,AUDIO.overworldTheme.path);
         this.load.audio(AUDIO.dead.key,AUDIO.dead.path);
         this.load.audio(AUDIO.pause.key,AUDIO.pause.path);
+        this.load.audio(AUDIO.marioJump.key,AUDIO.marioJump.path);
     }
 
     private loadImages(){

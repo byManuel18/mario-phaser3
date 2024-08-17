@@ -62,6 +62,7 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.keys?.space.isDown && this.body?.touching.down) {
+      this.scene.sound.play(AUDIO.marioJump.key, {volume: 0.05});
       this.setVelocityY(-this.playerData.jumpForce);
       this.anims.play(ANIMATIONS.mario.jump.key, true);
     }
