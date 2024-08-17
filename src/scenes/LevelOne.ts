@@ -7,8 +7,9 @@ import { GAME_SCALE } from "../config";
 import { floorBuilder } from "./utils/floorBuilder";
 import { MAP_LEVEL_ONE } from "./data/maps";
 import { GlobalScene } from "./class/globalScene.class";
-import { Gommba } from "../entities/goomba";
+import { Goomba } from "../entities/goomba";
 import { Enemy } from "../entities/enemy";
+import { Block } from "../scenary/block";
 
 export class LevelOne extends GlobalScene {
   player!: Mario;
@@ -47,11 +48,19 @@ export class LevelOne extends GlobalScene {
 
     this.player.setFloorCollider(floor);
 
-    this.enemys.add(new Gommba(this, 10, SCREENHEIGHT - 16 * GAME_SCALE));
+    this.enemys.add(new Goomba(this, 855, SCREENHEIGHT - 16 * GAME_SCALE));
     
     this.player.setEnemysCollider(this.enemys);
-    
-    this.physics.add.collider(this.enemys, floor);
+
+    this.physics.add.collider(this.enemys, floor, (enemy, obj)=>{
+      if(enemy instanceof Goomba){
+        const {left, right} = (enemy as Goomba).body!.touching;
+        const {left: leftBlock, right: rightBlock} = (obj as Block).body!.touching;
+        if((left && rightBlock) || (right && leftBlock)){
+          enemy.changeDirectionEnemy();
+        }
+      }
+    });
     
     
     this.mainAudio.play(); 

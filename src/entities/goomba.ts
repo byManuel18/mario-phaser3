@@ -6,7 +6,7 @@ import { ANIMATIONS } from "./config/animations";
 import { SPRITES } from "./config/sprites";
 import { Enemy } from "./enemy";
 
-export class Gommba extends Enemy {
+export class Goomba extends Enemy {
   velocity: number = 100;
   isDead: boolean = false;
 
@@ -46,5 +46,9 @@ export class Gommba extends Enemy {
         this.destroy();
     },[],this);
 
+  }
+
+  changeDirectionEnemy(){
+    this.velocity = -this.velocity;
   }
 }
