@@ -49,6 +49,7 @@ export class LevelOne extends GlobalScene {
     this.player.setFloorCollider(floor);
 
     this.enemys.add(new Goomba(this, 855, SCREENHEIGHT - 16 * GAME_SCALE));
+    this.enemys.add(new Goomba(this, 950, SCREENHEIGHT - 16 * GAME_SCALE));
     
     this.player.setEnemysCollider(this.enemys);
 
@@ -58,6 +59,17 @@ export class LevelOne extends GlobalScene {
         const {left: leftBlock, right: rightBlock} = (obj as Block).body!.touching;
         if((left && rightBlock) || (right && leftBlock)){
           enemy.changeDirectionEnemy();
+        }
+      }
+    });
+
+    this.physics.add.collider(this.enemys, this.enemys, (enemy1, enemy2) => {
+      if (enemy1 instanceof Goomba && enemy2 instanceof Goomba) {
+        const {left, right} = (enemy1 as Goomba).body!.touching;
+        const {left: leftGoomba, right: rightGoomba} = (enemy2 as Goomba).body!.touching;
+        if((left && rightGoomba) || (right && leftGoomba)){
+          enemy1.changeDirectionEnemy();
+          enemy2.changeDirectionEnemy();
         }
       }
     });
@@ -74,6 +86,9 @@ export class LevelOne extends GlobalScene {
    Phaser.Actions.Call(this.enemys?.getChildren() || [],(enemy)=>{
     if(enemy instanceof Enemy){
       enemy.moveEnemy();
+      if(enemy.isDead){
+        this.enemys?.remove(enemy);
+      }
     }
    },this);
   }

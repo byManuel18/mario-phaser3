@@ -32,7 +32,7 @@ export class Goomba extends Enemy {
       this.destroy();
     } else {
       this.setVelocityX(this.velocity);
-    }
+    } 
   }
 
   public killEnemy(): void {
