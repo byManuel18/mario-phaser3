@@ -37,21 +37,4 @@ export abstract class Enemy
   changeDirectionEnemy() {
     this.velocity = -this.velocity;
   }
-
-  public static setFloorCallBackCollider(enemy: Enemy, block: Block) {
-    const { left, right } = enemy.body!.touching;
-    const { left: leftBlock, right: rightBlock } = block.body!.touching;
-    if ((left && rightBlock) || (right && leftBlock)) {
-      enemy.changeDirectionEnemy();
-    }
-  }
-
-  public static setEnemyCallBackCollider(enemya: Enemy, enemyb: Enemy) {
-    const { left, right } = enemya.body!.touching;
-    const { left: leftGoomba, right: rightGoomba } = enemyb.body!.touching;
-    if ((left && rightGoomba) || (right && leftGoomba)) {
-      enemya.changeDirectionEnemy();
-      enemyb.changeDirectionEnemy();
-    }
-  }
 }

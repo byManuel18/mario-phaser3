@@ -10,6 +10,7 @@ import { GlobalScene } from "./class/globalScene.class";
 import { Goomba } from "../entities/goomba";
 import { Enemy } from "../entities/enemy";
 import { Block } from "../scenary/block";
+import { setEnemyCallBackCollider, setFloorCallBackCollider } from "./utils/colliderFnt";
 
 export class LevelOne extends GlobalScene {
   player!: Mario;
@@ -54,11 +55,11 @@ export class LevelOne extends GlobalScene {
     this.player.setEnemysCollider(this.enemys);
 
     this.physics.add.collider(this.enemys, floor, (enemy, obj)=>{
-     Enemy.setFloorCallBackCollider(enemy as Enemy, obj as Block);
+     setFloorCallBackCollider(enemy as Enemy, obj as Block);
     });
 
     this.physics.add.collider(this.enemys, this.enemys, (enemy1, enemy2) => {
-     Enemy.setEnemyCallBackCollider(enemy1 as Enemy, enemy2 as Enemy);
+     setEnemyCallBackCollider(enemy1 as Enemy, enemy2 as Enemy);
     });
     
     
