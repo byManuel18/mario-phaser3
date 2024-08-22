@@ -1,6 +1,5 @@
 import { GAME_SCALE } from "../config";
 import { IEnemy } from "../interfaces/enemy.interface";
-import { Block } from "../scenary/block";
 import { GlobalScene } from "../scenes/class/globalScene.class";
 
 export abstract class Enemy
