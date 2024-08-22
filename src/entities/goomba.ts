@@ -47,8 +47,4 @@ export class Goomba extends Enemy {
     },[],this);
 
   }
-
-  changeDirectionEnemy(){
-    this.velocity = -this.velocity;
-  }
 }

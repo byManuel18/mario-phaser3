@@ -4,4 +4,5 @@ export interface IEnemy{
 
     killEnemy: ()=> void;
     moveEnemy: ()=> void;
+    changeDirectionEnemy: ()=> void;
 }

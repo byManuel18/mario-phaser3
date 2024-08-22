@@ -54,24 +54,11 @@ export class LevelOne extends GlobalScene {
     this.player.setEnemysCollider(this.enemys);
 
     this.physics.add.collider(this.enemys, floor, (enemy, obj)=>{
-      if(enemy instanceof Goomba){
-        const {left, right} = (enemy as Goomba).body!.touching;
-        const {left: leftBlock, right: rightBlock} = (obj as Block).body!.touching;
-        if((left && rightBlock) || (right && leftBlock)){
-          enemy.changeDirectionEnemy();
-        }
-      }
+     Enemy.setFloorCallBackCollider(enemy as Enemy, obj as Block);
     });
 
     this.physics.add.collider(this.enemys, this.enemys, (enemy1, enemy2) => {
-      if (enemy1 instanceof Goomba && enemy2 instanceof Goomba) {
-        const {left, right} = (enemy1 as Goomba).body!.touching;
-        const {left: leftGoomba, right: rightGoomba} = (enemy2 as Goomba).body!.touching;
-        if((left && rightGoomba) || (right && leftGoomba)){
-          enemy1.changeDirectionEnemy();
-          enemy2.changeDirectionEnemy();
-        }
-      }
+     Enemy.setEnemyCallBackCollider(enemy1 as Enemy, enemy2 as Enemy);
     });
     
     
