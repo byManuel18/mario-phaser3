@@ -21,6 +21,6 @@ export const SPRITES = {
     fireBall: {
         key: 'fireball',
         path: '../../assets/entities/fireball.png',
-        frames: { frameWidth: 16, frameHeight: 16 }
+        frames: { frameWidth: 16, frameHeight: 8 }
     }
 }
