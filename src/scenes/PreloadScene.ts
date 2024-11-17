@@ -39,6 +39,7 @@ export class PreloadScene extends Phaser.Scene {
           key,
           sprite: { key: keyAnim, end, start },
           frameRate,
+          repeat,
         } = animations[keyAnimConst as keyof typeof animations];
 
         this.anims.create({
@@ -48,7 +49,7 @@ export class PreloadScene extends Phaser.Scene {
             end,
           }),
           frameRate,
-          repeat: -1,
+          repeat: repeat !== undefined ? repeat : -1,
         });
       });
     });

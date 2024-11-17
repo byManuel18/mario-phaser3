@@ -32,7 +32,7 @@ export class Goomba extends Enemy {
       this.destroy();
     } else {
       this.setVelocityX(this.velocity);
-    } 
+    }
   }
 
   public killEnemy(): void {
@@ -42,9 +42,13 @@ export class Goomba extends Enemy {
     this.anims.play(ANIMATIONS.goomba.dead);
     this.setVelocityX(0);
 
-    this.scene.time.delayedCall(500,()=>{
+    this.scene.time.delayedCall(
+      500,
+      () => {
         this.destroy();
-    },[],this);
-
+      },
+      [],
+      this
+    );
   }
 }

@@ -3,10 +3,10 @@ import { Player } from "../interfaces/player.interface";
 import { SCREENHEIGHT, SCREENWIDTH } from "../main";
 import { AUDIO } from "../scenes/audio/audio";
 import { GlobalScene } from "../scenes/class/globalScene.class";
-import { CustomEvents } from "../scenes/config/customEvents";
 import { ANIMATIONS } from "./config/animations";
 import { SPRITES } from "./config/sprites";
 import { Enemy } from "./enemy";
+import { FireBall } from "./fireBall";
 
 export class Mario extends Phaser.Physics.Arcade.Sprite {
   private playerData: Player = {
@@ -16,12 +16,14 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
     speed: (SCREENWIDTH / 10) * GAME_SCALE,
     jumpForce: 250 * GAME_SCALE,
     gravity: 300 * GAME_SCALE,
+    cdFireball: 500,
   };
 
   private keys?: Phaser.Types.Input.Keyboard.CursorKeys;
 
   private floorCollider?: Phaser.Physics.Arcade.Collider;
   private enemysCollider?: Phaser.Physics.Arcade.Collider;
+  private canShootFireBall: boolean = true;
 
   constructor(scene: GlobalScene, x: number, y: number) {
     super(scene, x, y, SPRITES.mario.key);
@@ -45,7 +47,12 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
   }
 
   move() {
-    if (this.playerData.bloked || !this.playerData.life || this.scene.scene.isPaused()) return;
+    if (
+      this.playerData.bloked ||
+      !this.playerData.life ||
+      this.scene.scene.isPaused()
+    )
+      return;
 
     switch (true) {
       case this.keys?.right.isDown:
@@ -71,7 +78,7 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
       this.setVelocityY(-this.playerData.jumpForce);
     }
 
-    if(!this.body?.touching.down){
+    if (!this.body?.touching.down) {
       this.anims.play(ANIMATIONS.mario.jump.key, true);
     }
 
@@ -143,8 +150,21 @@ export class Mario extends Phaser.Physics.Arcade.Sprite {
   }
 
   private setListener() {
-    // this.scene.events.on(CustomEvents.START, (pause: boolean) => {
-    //   this.playerData.bloked = pause;
-    // });
+    this.scene.input.keyboard?.on("keydown-X", () => {
+      if (!this.canShootFireBall) {
+        return;
+      }
+      this.canShootFireBall = false;
+
+      const newFireBall = new FireBall(
+        this.scene as GlobalScene,
+        this.x,
+        this.y
+      );
+
+      this.scene.time.delayedCall(this.playerData.cdFireball, () => {
+        this.canShootFireBall = true;
+      });
+    });
   }
 }

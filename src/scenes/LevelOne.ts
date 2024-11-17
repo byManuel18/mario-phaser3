@@ -10,7 +10,10 @@ import { GlobalScene } from "./class/globalScene.class";
 import { Goomba } from "../entities/goomba";
 import { Enemy } from "../entities/enemy";
 import { Block } from "../scenary/block";
-import { setEnemyCallBackCollider, setFloorCallBackCollider } from "./utils/colliderFnt";
+import {
+  setEnemyCallBackCollider,
+  setFloorCallBackCollider,
+} from "./utils/colliderFnt";
 
 export class LevelOne extends GlobalScene {
   player!: Mario;
@@ -18,10 +21,11 @@ export class LevelOne extends GlobalScene {
     | Phaser.Sound.NoAudioSound
     | Phaser.Sound.HTML5AudioSound
     | Phaser.Sound.WebAudioSound;
-  widthScene: number = (SCREENWIDTH * 2) * GAME_SCALE;
+  widthScene: number = SCREENWIDTH * 2 * GAME_SCALE;
   heightScene: number = SCREENHEIGHT;
 
   enemys?: Phaser.Physics.Arcade.Group;
+  floor?: Phaser.Physics.Arcade.StaticGroup;
 
   constructor() {
     super(SCENES.LEVEL_ONE);
@@ -32,53 +36,54 @@ export class LevelOne extends GlobalScene {
   }
 
   create(): void {
-
-    this.physics.world.setBounds(0, 0, this.widthScene , this.heightScene);
+    this.physics.world.setBounds(0, 0, this.widthScene, this.heightScene);
 
     this.mainAudio = this.sound.add(AUDIO.overworldTheme.key, {
       loop: true,
       volume: 0.2,
     });
 
-    const floor = this.physics.add.staticGroup();
+    this.floor = this.physics.add.staticGroup();
     this.enemys = this.physics.add.group();
 
-    floorBuilder(floor, MAP_LEVEL_ONE, { x: 0, y: SCREENHEIGHT });
+    floorBuilder(this.floor, MAP_LEVEL_ONE, { x: 0, y: SCREENHEIGHT });
 
     this.player = new Mario(this, 100, SCREENHEIGHT - 32 * GAME_SCALE);
 
-    this.player.setFloorCollider(floor);
+    this.player.setFloorCollider(this.floor);
 
     this.enemys.add(new Goomba(this, 855, SCREENHEIGHT - 16 * GAME_SCALE));
     this.enemys.add(new Goomba(this, 950, SCREENHEIGHT - 16 * GAME_SCALE));
-    
+
     this.player.setEnemysCollider(this.enemys);
 
-    this.physics.add.collider(this.enemys, floor, (enemy, obj)=>{
-     setFloorCallBackCollider(enemy as Enemy, obj as Block);
+    this.physics.add.collider(this.enemys, this.floor, (enemy, obj) => {
+      setFloorCallBackCollider(enemy as Enemy, obj as Block);
     });
 
     this.physics.add.collider(this.enemys, this.enemys, (enemy1, enemy2) => {
-     setEnemyCallBackCollider(enemy1 as Enemy, enemy2 as Enemy);
+      setEnemyCallBackCollider(enemy1 as Enemy, enemy2 as Enemy);
     });
-    
-    
-    this.mainAudio.play(); 
 
-    this.scene.launch(SCENES.UISCENE,{parentScene: SCENES.LEVEL_ONE});
+    this.mainAudio.play();
 
+    this.scene.launch(SCENES.UISCENE, { parentScene: SCENES.LEVEL_ONE });
   }
 
   update(time: number, delta: number): void {
-   this.player.move();
-   Phaser.Actions.Call(this.enemys?.getChildren() || [],(enemy)=>{
-    if(enemy instanceof Enemy){
-      enemy.moveEnemy();
-      if(enemy.isDead){
-        this.enemys?.remove(enemy);
-      }
-    }
-   },this);
+    this.player.move();
+    Phaser.Actions.Call(
+      this.enemys?.getChildren() || [],
+      (enemy) => {
+        if (enemy instanceof Enemy) {
+          enemy.moveEnemy();
+          if (enemy.isDead) {
+            this.enemys?.remove(enemy);
+          }
+        }
+      },
+      this
+    );
   }
 
   private loadSprites() {
@@ -90,6 +95,4 @@ export class LevelOne extends GlobalScene {
 
     this.load.spritesheet(key, path, { frameWidth, frameHeight });
   }
-
-  
 }

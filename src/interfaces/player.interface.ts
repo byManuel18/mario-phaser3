@@ -5,4 +5,5 @@ export interface Player {
   speed: number;
   jumpForce: number;
   gravity: number;
+  cdFireball: number;
 }
