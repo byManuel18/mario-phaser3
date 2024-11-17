@@ -1,5 +1,5 @@
+import { SPRITES } from './../entities/config/sprites';
 import { ANIMATIONS } from "../entities/config/animations";
-import { SPRITES } from "../entities/config/sprites";
 import { AUDIO } from "./audio/audio";
 import { SCENES } from "./config/scenes.config";
 
@@ -27,21 +27,14 @@ export class PreloadScene extends Phaser.Scene {
 
     private loadSprites(){
 
-        const {key, path, frames: {frameHeight, frameWidth}} = SPRITES.mario;
-        
-        this.load.spritesheet(
-            key,
-            path,
-            { frameWidth, frameHeight },
-        );
-
-        const goobasprite = SPRITES.goomba;
-        
-        this.load.spritesheet(
-            goobasprite.key,
-            goobasprite.path,
-            { frameWidth: goobasprite.frames.frameWidth, frameHeight: goobasprite.frames.frameHeight },
-        );
+        Object.keys(SPRITES).forEach(keyConst=>{
+            const { key, frames: {frameHeight, frameWidth} , path} = SPRITES[keyConst as keyof typeof SPRITES];
+            this.load.spritesheet(
+                key,
+                path,
+                { frameWidth, frameHeight },
+            );
+        });
     }
 
     private createAnimations(){

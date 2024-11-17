@@ -16,5 +16,11 @@ export const SPRITES = {
         key: 'goomba',
         path: '../../assets/entities/overworld/goomba.png',
         frames: { frameWidth: 16, frameHeight: 16 }
+    },
+
+    fireBall: {
+        key: 'fireball',
+        path: '../../assets/entities/fireball.png',
+        frames: { frameWidth: 16, frameHeight: 16 }
     }
 }
