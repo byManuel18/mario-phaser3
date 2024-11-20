@@ -2,6 +2,7 @@ import { SPRITES } from "./../entities/config/sprites";
 import { ANIMATIONS } from "../entities/config/animations";
 import { AUDIO } from "./audio/audio";
 import { SCENES } from "./config/scenes.config";
+import { IMAGES } from "../entities/config/images";
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -18,6 +19,8 @@ export class PreloadScene extends Phaser.Scene {
     this.createAnimations();
 
     this.scene.start(SCENES.LEVEL_ONE);
+
+    document.querySelector('#loadingScreen')?.remove()
   }
 
   private loadSprites() {
@@ -57,17 +60,15 @@ export class PreloadScene extends Phaser.Scene {
 
   private loadAudio() {
     Object.keys(AUDIO).forEach((keyAudio) => {
-      const { key, path } = AUDIO[keyAudio as keyof typeof Audio];
+      const { key, path } = AUDIO[keyAudio as keyof typeof AUDIO];
       this.load.audio(key, path);
     });
   }
 
   private loadImages() {
-    this.load.image("mushroom", "../../assets/collectibles/super-mushroom.png");
-    this.load.image(
-      "mushroom-live",
-      "../../assets/collectibles/live-mushroom.png"
-    );
-    this.load.image("slot", "../../assets/mine/slot.png");
+    Object.keys(IMAGES).forEach((keyImage) => {
+      const { key, path } = IMAGES[keyImage as keyof typeof IMAGES];
+      this.load.image(key, path);
+    });
   }
 }

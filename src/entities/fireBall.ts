@@ -39,6 +39,7 @@ export class FireBall extends Phaser.Physics.Arcade.Sprite {
     this.anims.play(ANIMATIONS.fireball.throw);
 
     this.setVelocityX(this.velocity);
+    this.setVelocityY(-Math.abs(this.velocity));
 
     this.setColliders();
 

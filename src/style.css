@@ -16,7 +16,7 @@ body {
   min-zoom: 100%;
   background: rgb(132, 132, 255);
   overflow: hidden;
-  height: 100%;
+  height: 100dvh;
   width: 100%;
   color: #f0f0f0;
   font-family: pixel;
@@ -26,4 +26,13 @@ body {
   width: 100%;
   font-family: pixel;
   display: flex;
+}
+
+#loadingScreen{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: grid;
+  place-content: center;
+  background: rgb(132, 132, 255);
 }
