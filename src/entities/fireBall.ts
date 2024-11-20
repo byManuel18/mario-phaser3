@@ -1,4 +1,5 @@
 import { GAME_SCALE } from "../config";
+import { AUDIO } from "../scenes/audio/audio";
 import { GlobalScene } from "../scenes/class/globalScene.class";
 import { ANIMATIONS } from "./config/animations";
 import { SPRITES } from "./config/sprites";
@@ -37,6 +38,7 @@ export class FireBall extends Phaser.Physics.Arcade.Sprite {
     this.setGravityY(300 * GAME_SCALE);
 
     this.anims.play(ANIMATIONS.fireball.throw);
+    this.scene.sound.play(AUDIO.fireball.key,{loop: false});
 
     this.setVelocityX(this.velocity);
     this.setVelocityY(-Math.abs(this.velocity));

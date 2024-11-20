@@ -21,5 +21,9 @@ export const AUDIO = {
         key: 'goomba-stomp',
         path: '../../assets/sound/effects/goomba-stomp.wav'
     },
+    fireball:{
+        key: 'fireball',
+         path: '../../assets/sound/effects/fireball.mp3'
+    }
 
 }
